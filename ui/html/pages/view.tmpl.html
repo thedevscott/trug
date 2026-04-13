@@ -1,0 +1,16 @@
+{{define "title"}}Transaction #{{.Transaction.ID}}{{end}}
+
+{{define "main"}}
+    {{with .Transaction}}
+    <div class='transaction'>
+        <div class='metadata'>
+            <strong>{{.Title}}</strong>
+            <span>#{{.ID}}</span>
+        </div>
+
+        <div class='metadata'>
+            <time>Created: {{humanDate .Created}}</time>
+        </div>
+    </div>
+    {{end}}
+{{end}}
