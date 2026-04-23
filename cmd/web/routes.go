@@ -29,6 +29,8 @@ func (app *application) routes() http.Handler {
 
 	protected := dynamic.Append(app.requireAuthentication)
 
+	mux.Handle("GET /transaction/create", protected.ThenFunc(app.transactionCreate))
+	mux.Handle("POST /transaction/create", protected.ThenFunc(app.transactionCreatePost))
 	mux.Handle("GET /account/view", protected.ThenFunc(app.accountView))
 	mux.Handle("GET /account/password/update", protected.ThenFunc(app.accountPasswordUpdate))
 	mux.Handle("POST /account/password/update", protected.ThenFunc(app.accountPasswordUpdatePost))

@@ -16,3 +16,9 @@ test:
 
 test-profile:
 	go test -cover ./...
+# Create DB docker container
+run-mysql:
+	docker run --name trug-mysql -e MYSQL_ROOT_PASSWORD=$(TRUGPASS) -d -p 3306:3306 -v $(pwd)/internal/database:/var/lib/mysql mysql
+# Connect to container
+connect-mysql:
+	docker exec -it trug-mysql mysql -u root -p

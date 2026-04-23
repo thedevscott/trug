@@ -2,12 +2,16 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
 	"time"
 
 	"net/http"
 
 	"github.com/thedevscott/trug/internal/models"
 	"github.com/thedevscott/trug/internal/validator"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type accountPasswordUpdateForm struct {
@@ -18,15 +22,13 @@ type accountPasswordUpdateForm struct {
 }
 
 // Transaction represents a single financial movement.
-type TransactionCreateForm struct {
-	Title               string    `form:"title"`
-	AmountInCents       int64     `form:"amount"`
-	Category            string    `form:"category"`
-	Description         string    `form:"description"`
-	Date                time.Time `form:"date" time_format:"2006-01-02"`
-	CreatedAt           time.Time `form:"created_at"`
-	UpdatedAt           time.Time `form:"updated_at"`
-	IsIncome            bool      `form:"is_income"`
+type transactionCreateForm struct {
+	Title               string `form:"title"`
+	IsIncome            bool   `form:"is_income"`
+	Amount              string `form:"amount"`
+	Category            string `form:"category"`
+	Description         string `form:"description"`
+	Date                string `form:"date" time_format:"2006-01-02"`
 	validator.Validator `form:"-"`
 }
 
@@ -41,6 +43,72 @@ type userLoginForm struct {
 	Email               string `form:"email"`
 	Password            string `form:"password"`
 	validator.Validator `form:"-"`
+}
+
+// transactionCreate A handler for creating a snippet
+func (app *application) transactionCreate(w http.ResponseWriter, r *http.Request) {
+	transactions, err := app.transactions.Latest()
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.Transactions = transactions
+
+	data.Form = transactionCreateForm{
+		Date: time.Now().Format("2027-04-30"),
+	}
+
+	app.render(w, r, http.StatusOK, "create.tmpl.html", data)
+}
+
+func (app *application) transactionCreatePost(w http.ResponseWriter, r *http.Request) {
+	var form transactionCreateForm
+
+	err := app.decodePostForm(r, &form)
+	fmt.Println(err)
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	form.CheckField(validator.NotBlank(form.Title), "title", "This field cannot be blank")
+	form.CheckField(validator.MaxChars(form.Title, 100), "title", "This field cannot be more than 100 characters long")
+	form.CheckField(validator.NotBlank(form.Category), "category", "This field cannot be blank")
+	form.CheckField(validator.NotBlank(form.Description), "description", "This field cannot be blank")
+
+	if !form.Valid() {
+		data := app.newTemplateData(r)
+		data.Form = form
+		app.render(w, r, http.StatusUnprocessableEntity, "create.tmpl.html", data)
+		return
+	}
+
+	transactionDate, err := time.Parse("2006-01-02", form.Date)
+	if err != nil {
+		app.clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+
+	amount, err := strconv.ParseFloat(form.Amount, 64)
+	if err != nil {
+		app.clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+	amountInCents := amount * 100
+
+	_, err = app.transactions.Insert(form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	caser := cases.Title(language.English)
+
+	app.sessionManager.Put(r.Context(), "flash", fmt.Sprintf("%s Transaction recorded!", caser.String(form.Title)))
+
+	http.Redirect(w, r, "/transaction/create", http.StatusSeeOther)
 }
 
 // about the about page "/about" for the app

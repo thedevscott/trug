@@ -10,10 +10,72 @@
         {{end}}
         <input type='text' name='title' value='{{.Form.Title}}'>
     </div>
-   <!-- TODO: Add remaining fields -->
- 
+    <div>
+        <label>Transaction Date:</label>
+        {{with .Form.FieldErrors.date}}
+            <label class='error'>{{.}}</label>
+        {{end}}
+        <input type='date' name='date' value='{{.Form.Date}}'>
+    </div>
+    <div>
+        <label>Amount:</label>
+        {{with .Form.FieldErrors.amount}}
+            <label class='error'>{{.}}</label>
+        {{end}}
+        <input type='text' name='amount' value='{{.Form.Amount}}'>
+    </div>
+    <div>
+        <label>Income:</label>
+        {{with .Form.FieldErrors.isincome}}
+            <label class='error'>{{.}}</label>
+        {{end}}
+        <input type='checkbox' name='is_income' value='{{.Form.IsIncome}}'>
+    </div>
+    <div>
+        <label>Category:</label>
+        {{with .Form.FieldErrors.category}}
+            <label class='error'>{{.}}</label>
+        {{end}}
+        <input type='text' name='category' value='{{.Form.Category}}'>
+    </div>
+    <div>
+        <label>Description:</label>
+        {{with .Form.FieldErrors.description}}
+            <label class='error'>{{.}}</label>
+        {{end}}
+        <textarea name='description'>{{.Form.Description}}</textarea>
+    </div>
     <div>
         <input type='submit' value='Save'>
     </div>
 </form>
+
+    <h2>Latest Transactions</h2>
+    {{if .Transactions}}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Income</th>
+            <th>Created</th>
+            <th>Entry Date</th>
+            <th>ID</th>
+        </tr>
+        {{range .Transactions}}
+        <tr>
+            <td><a href='/transaction/view/{{.ID}}'>{{.Title}}</a></td>
+            <td>{{centsToDollar .Amount}}</td>
+            <!-- <td>{{ .Amount}}</td> -->
+            <td>{{.Category}}</td>
+            <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>
+            <td>{{humanDate .CreatedAt}}</td>
+            <td>{{humanDate .TransactionDate}}</td>
+            <td>#{{.ID}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{else}}
+        <p>There's nothing to see here yet!</p>
+    {{end}}
 {{end}}

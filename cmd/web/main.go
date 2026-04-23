@@ -21,6 +21,7 @@ import (
 type application struct {
 	debug          bool
 	logger         *slog.Logger
+	transactions   models.TransactionModelInterface
 	users          models.UserModelInterface
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
@@ -30,7 +31,7 @@ type application struct {
 func main() {
 	// cli flags
 	addr := flag.String("addr", ":4000", "HTTP network address")
-	dsn := flag.String("dsn", "web:pass@/trug?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "web:trugpass@/trug?parseTime=true", "MySQL data source name")
 	dbg := flag.Bool("debug", false, "Enables detailed view of errors and stack traces in the browser")
 	flag.Parse()
 
@@ -65,6 +66,7 @@ func main() {
 	app := &application{
 		debug:          *dbg,
 		logger:         logger,
+		transactions:   &models.TransactionModel{DB: db},
 		users:          &models.UserModel{DB: db},
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"io/fs"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 
 type templateData struct {
 	CurrentYear     int
+	Transactions    []models.Transaction
 	Form            any
 	Flash           string
 	IsAuthenticated bool
@@ -29,8 +31,14 @@ func humanDate(t time.Time) string {
 	return t.UTC().Format("02 Jan 2006 at 15:04")
 }
 
+func centsToDollar(v int64) string {
+	value := float64(v) / 100
+	return fmt.Sprintf("%.2f", value)
+}
+
 var functions = template.FuncMap{
-	"humanDate": humanDate,
+	"humanDate":     humanDate,
+	"centsToDollar": centsToDollar,
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {
