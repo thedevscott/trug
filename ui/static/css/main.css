@@ -46,6 +46,7 @@ h1 a:hover {
 
 h2 {
     font-size: 22px;
+    text-align: center;
     margin-bottom: 36px;
     position: relative;
     top: -9px;
@@ -289,6 +290,20 @@ td, th {
     padding: 9px 18px;
 }
 
+.table-scroll-container {
+    /* Calculate height: row height (e.g., 45px) * 7 rows */
+    max-height: 760px; 
+    overflow-y: scroll;
+    border: 1px solid #eee;
+    border-radius: 8px;
+  }
+  
+  tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    height: 45px; /* Fixed height makes the '7 row' math work perfectly */
+  }
+  
 th:last-child, td:last-child {
     text-align: right;
     color: #6A6C6F;
@@ -311,3 +326,57 @@ footer {
     color: #6A6C6F;
     text-align: center;
 }
+
+  /* The Main Container */
+.container {
+    display: flex;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    height: 80vh; /* Limits height to make the list scrollable */
+    font-family: 'Inter', sans-serif; /* A modern font choice */
+  }
+  
+  /* The Transaction Form */
+  .transaction-form {
+    flex: 0 0 auto; /* Fit to content */
+    width: 40%;
+    background: #ffffff;
+    padding: 2rem;
+    /* border-radius: 12px; */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eee;
+    align-self: flex-start; /* Keeps it from stretching vertically */
+  }
+  
+  /* The Transaction List */
+  .transaction-list {
+    flex: 1; /* Take remaining space */
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    
+    /* Scrolling Logic */
+    overflow-y: auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Scrollbar Styling (Optional) */
+  .transaction-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .transaction-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+  }
+
+  .description {
+    width: 226px; 
+    height: 72px;
+  }
+

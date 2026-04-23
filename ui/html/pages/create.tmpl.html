@@ -1,81 +1,88 @@
 {{define "title"}}Create a New Transaction{{end}}
 
 {{define "main"}}
-<form action='/transaction/create' method='post'>
-    <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
-    <div>
-        <label>Title:</label>
-        {{with .Form.FieldErrors.title}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <input type='text' name='title' value='{{.Form.Title}}'>
-    </div>
-    <div>
-        <label>Transaction Date:</label>
-        {{with .Form.FieldErrors.date}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <input type='date' name='date' value='{{.Form.Date}}'>
-    </div>
-    <div>
-        <label>Amount:</label>
-        {{with .Form.FieldErrors.amount}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <input type='text' name='amount' value='{{.Form.Amount}}'>
-    </div>
-    <div>
-        <label>Income:</label>
-        {{with .Form.FieldErrors.isincome}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <input type='checkbox' name='is_income' value='{{.Form.IsIncome}}'>
-    </div>
-    <div>
-        <label>Category:</label>
-        {{with .Form.FieldErrors.category}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <input type='text' name='category' value='{{.Form.Category}}'>
-    </div>
-    <div>
-        <label>Description:</label>
-        {{with .Form.FieldErrors.description}}
-            <label class='error'>{{.}}</label>
-        {{end}}
-        <textarea name='description'>{{.Form.Description}}</textarea>
-    </div>
-    <div>
-        <input type='submit' value='Save'>
-    </div>
-</form>
+<!-- TODO: put a stats section here -->
+<div class='container'>
+    <div class="transaction-form">
+    <h2>Transaction Entry</h2>
+    <form action='/transaction/create' method='post'>
+        <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+        <div>
+            <label>Title:</label>
+            {{with .Form.FieldErrors.title}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='text' name='title' value='{{.Form.Title}}'>
+        </div>
+        <div>
+            <label>Transaction Date:</label>
+            {{with .Form.FieldErrors.date}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='date' name='date' value='{{.Form.Date}}'>
+        </div>
+        <div>
+            <label>Amount:</label>
+            {{with .Form.FieldErrors.amount}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='text' name='amount' value='{{.Form.Amount}}'>
+        </div>
+        <div>
+            <label>Income:</label>
+            {{with .Form.FieldErrors.isincome}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='checkbox' name='is_income' value='{{.Form.IsIncome}}'>
+        </div>
+        <div>
+            <label>Category:</label>
+            {{with .Form.FieldErrors.category}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <input type='text' name='category' value='{{.Form.Category}}'>
+        </div>
+        <div>
+            <label>Description:</label>
+            {{with .Form.FieldErrors.description}}
+                <label class='error'>{{.}}</label>
+            {{end}}
+            <textarea class='description' name='description'>{{.Form.Description}}</textarea>
+        </div>
+        <div>
+            <input type='submit' value='Save'>
+        </div>
+    </form>
+</div>
 
-    <h2>Latest Transactions</h2>
-    {{if .Transactions}}
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Income</th>
-            <th>Created</th>
-            <th>Entry Date</th>
-            <th>ID</th>
-        </tr>
-        {{range .Transactions}}
-        <tr>
-            <td><a href='/transaction/view/{{.ID}}'>{{.Title}}</a></td>
-            <td>{{centsToDollar .Amount}}</td>
-            <!-- <td>{{ .Amount}}</td> -->
-            <td>{{.Category}}</td>
-            <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>
-            <td>{{humanDate .CreatedAt}}</td>
-            <td>{{humanDate .TransactionDate}}</td>
-            <td>#{{.ID}}</td>
-        </tr>
+<div class="transactions-list">
+        <h2>Latest Transactions</h2>
+        {{if .Transactions}}
+        <div class='table-scroll-container'>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Income</th>
+                <th>Created</th>
+                <th>Entry Date</th>
+            </tr>
+            {{range .Transactions}}
+            <tr>
+                <td><a href='/transaction/view/{{.ID}}'>{{.Title}}</a></td>
+                <td>{{centsToDollar .Amount}}</td>
+                <td>{{.Category}}</td>
+                <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>
+                <td>{{humanDate .CreatedAt}}</td>
+                <td>{{humanDate .TransactionDate}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </div>
+        {{else}}
+            <p>There's nothing to see here yet!</p>
         {{end}}
-    </table>
-    {{else}}
-        <p>There's nothing to see here yet!</p>
     {{end}}
-{{end}}
+</div>
+</div>

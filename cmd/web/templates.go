@@ -28,7 +28,7 @@ func humanDate(t time.Time) string {
 		return ""
 	}
 
-	return t.UTC().Format("02 Jan 2006 at 15:04")
+	return t.UTC().Format("02 Jan 2006")
 }
 
 func centsToDollar(v int64) string {
