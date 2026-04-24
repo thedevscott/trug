@@ -13,6 +13,7 @@ import (
 
 type templateData struct {
 	CurrentYear     int
+	Transaction     models.Transaction
 	Transactions    []models.Transaction
 	Form            any
 	Flash           string

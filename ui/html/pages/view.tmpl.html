@@ -1,16 +1,37 @@
 {{define "title"}}Transaction #{{.Transaction.ID}}{{end}}
 
 {{define "main"}}
-    {{with .Transaction}}
-    <div class='transaction'>
-        <div class='metadata'>
-            <strong>{{.Title}}</strong>
-            <span>#{{.ID}}</span>
-        </div>
-
-        <div class='metadata'>
-            <time>Created: {{humanDate .Created}}</time>
-        </div>
-    </div>
-    {{end}}
+<h2>Editing Entry - {{.Transaction.Title}}</h2>
+        <form action='/transaction/update/{{.Transaction.ID}}' method='post'>
+            <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+            <div>
+                <label>Title:</label>
+                <input type='text' name='title' value='{{.Form.Title}}'>
+            </div>
+            <div>
+                <label>Transaction Date:</label>
+                <input type='date' name='date' value='{{.Form.Date}}'>
+            </div>
+            <div>
+                <label>Amount:</label>
+                <input type='text' name='amount' value='{{.Form.Amount}}'>
+            </div>
+            <div>
+                <label>Income:</label>
+                <input type='checkbox' name='is_income' value='{{.Form.IsIncome}}'>
+            </div>
+            <div>
+                <label>Category:</label>
+                <input type='text' name='category' value='{{.Form.Category}}'>
+            </div>
+            <div>
+                <label>Description:</label>
+                <textarea class='description' name='description'>{{.Form.Description}}</textarea>
+            </div>
+            <div class='view-actions'>
+                <input type='submit' value='Update'>
+                <a href='/transaction/delete/{{.Transaction.ID}}'>Delete</a>
+            </div>
+        </form>
 {{end}}
+

@@ -1,7 +1,12 @@
 {{define "title"}}Create a New Transaction{{end}}
 
 {{define "main"}}
-<!-- TODO: put a stats section here -->
+<!-- <div class='stats'>
+    <label>Date Range:</label>
+    <label>Income:</label>
+    <label>Expense:</label>
+    <label>Remaining Profit:</label>
+</div> -->
 <div class='container'>
     <div class="transaction-form">
     <h2>Transaction Entry</h2>
@@ -9,7 +14,7 @@
         <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
         <div>
             <label>Title:</label>
-            {{with .Form.FieldErrors.title}}
+             {{with .Form.FieldErrors.title}}
                 <label class='error'>{{.}}</label>
             {{end}}
             <input type='text' name='title' value='{{.Form.Title}}'>

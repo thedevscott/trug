@@ -67,7 +67,6 @@ func (app *application) transactionCreatePost(w http.ResponseWriter, r *http.Req
 	var form transactionCreateForm
 
 	err := app.decodePostForm(r, &form)
-	fmt.Println(err)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
@@ -111,6 +110,114 @@ func (app *application) transactionCreatePost(w http.ResponseWriter, r *http.Req
 	http.Redirect(w, r, "/transaction/create", http.StatusSeeOther)
 }
 
+func (app *application) transactionView(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	transaction, err := app.transactions.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	data := app.newTemplateData(r)
+
+	data.Form = transactionCreateForm{
+		Title:       transaction.Title,
+		IsIncome:    transaction.IsIncome,
+		Amount:      fmt.Sprintf("%.2f", float64(transaction.Amount/100)),
+		Category:    transaction.Category,
+		Description: transaction.Description,
+		Date:        transaction.TransactionDate.Format("2006-01-02"),
+	}
+
+	data.Transaction = transaction
+
+	app.render(w, r, http.StatusOK, "view.tmpl.html", data)
+}
+
+func (app *application) transactionUpdate(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	var form transactionCreateForm
+
+	err = app.decodePostForm(r, &form)
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	form.CheckField(validator.NotBlank(form.Title), "title", "This field cannot be blank")
+	form.CheckField(validator.MaxChars(form.Title, 100), "title", "This field cannot be more than 100 characters long")
+	form.CheckField(validator.NotBlank(form.Category), "category", "This field cannot be blank")
+	form.CheckField(validator.NotBlank(form.Description), "description", "This field cannot be blank")
+
+	if !form.Valid() {
+		data := app.newTemplateData(r)
+		data.Form = form
+		app.render(w, r, http.StatusUnprocessableEntity, fmt.Sprintf("/transaction/view/%d", id), data)
+		return
+	}
+
+	transactionDate, err := time.Parse("2006-01-02", form.Date)
+	if err != nil {
+		app.clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+
+	amount, err := strconv.ParseFloat(form.Amount, 64)
+	if err != nil {
+		app.clientError(w, http.StatusUnprocessableEntity)
+		return
+	}
+	amountInCents := amount * 100
+
+	_, err = app.transactions.Update(id, form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	caser := cases.Title(language.English)
+
+	app.sessionManager.Put(r.Context(), "flash", fmt.Sprintf("%s Transaction updated!", caser.String(form.Title)))
+
+	http.Redirect(w, r, fmt.Sprintf("/transaction/view/%d", id), http.StatusSeeOther)
+}
+
+func (app *application) transactionDelete(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+		return
+	}
+
+	num, err := app.transactions.Delete(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	app.sessionManager.Put(r.Context(), "flash", fmt.Sprintf("Deleted %d entry", num))
+
+	http.Redirect(w, r, "/transaction/create", http.StatusSeeOther)
+}
+
 // about the about page "/about" for the app
 func (app *application) about(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
@@ -134,14 +241,6 @@ func (app *application) accountView(w http.ResponseWriter, r *http.Request) {
 	data.User = user
 
 	app.render(w, r, http.StatusOK, "account.tmpl.html", data)
-}
-
-// home the main page "/" for the app
-func (app *application) home(w http.ResponseWriter, r *http.Request) {
-
-	data := app.newTemplateData(r)
-
-	app.render(w, r, http.StatusOK, "home.tmpl.html", data)
 }
 
 func (app *application) userSignup(w http.ResponseWriter, r *http.Request) {

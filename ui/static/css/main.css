@@ -291,7 +291,6 @@ td, th {
 }
 
 .table-scroll-container {
-    /* Calculate height: row height (e.g., 45px) * 7 rows */
     max-height: 760px; 
     overflow-y: scroll;
     border: 1px solid #eee;
@@ -301,7 +300,7 @@ td, th {
   tbody td {
     padding: 12px;
     border-bottom: 1px solid #eee;
-    height: 45px; /* Fixed height makes the '7 row' math work perfectly */
+    height: 45px;
   }
   
 th:last-child, td:last-child {
@@ -327,46 +326,40 @@ footer {
     text-align: center;
 }
 
-  /* The Main Container */
 .container {
     display: flex;
     gap: 1rem;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 1rem;
-    height: 80vh; /* Limits height to make the list scrollable */
-    font-family: 'Inter', sans-serif; /* A modern font choice */
+    height: 80vh; 
+    font-family: 'Inter', sans-serif;
   }
   
-  /* The Transaction Form */
   .transaction-form {
-    flex: 0 0 auto; /* Fit to content */
+    flex: 0 0 auto; 
     width: 40%;
     background: #ffffff;
     padding: 2rem;
-    /* border-radius: 12px; */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid #eee;
-    align-self: flex-start; /* Keeps it from stretching vertically */
+    align-self: flex-start; 
   }
   
-  /* The Transaction List */
   .transaction-list {
-    flex: 1; /* Take remaining space */
+    flex: 1; 
     background: #ffffff;
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border: 1px solid #eee;
     
-    /* Scrolling Logic */
     overflow-y: auto; 
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
 
-  /* Scrollbar Styling (Optional) */
   .transaction-list::-webkit-scrollbar {
     width: 6px;
   }
@@ -376,7 +369,24 @@ footer {
   }
 
   .description {
-    width: 226px; 
-    height: 72px;
+    height: 133px;
   }
 
+  .view-actions {
+    display: flex;
+    align-items: center;
+    gap: 73%;
+  }
+
+  .view-actions a {
+    display: inline-block;
+    padding: 13px 27px;
+    background-color: #d32f2f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: 18px;
+    font-weight: 700;
+    border: 1px solid rgba(0,0,0,0.12);
+}

@@ -20,7 +20,7 @@ func (app *application) routes() http.Handler {
 	dynamic := alice.New(app.sessionManager.LoadAndSave, preventCSRF, app.authenticate)
 
 	// Register app routes
-	mux.Handle("GET /{$}", dynamic.ThenFunc(app.home))
+	mux.Handle("GET /{$}", dynamic.ThenFunc(app.about))
 	mux.Handle("GET /about", dynamic.ThenFunc(app.about))
 	mux.Handle("GET /user/signup", dynamic.ThenFunc(app.userSignup))
 	mux.Handle("POST /user/signup", dynamic.ThenFunc(app.userSignupPost))
@@ -31,6 +31,9 @@ func (app *application) routes() http.Handler {
 
 	mux.Handle("GET /transaction/create", protected.ThenFunc(app.transactionCreate))
 	mux.Handle("POST /transaction/create", protected.ThenFunc(app.transactionCreatePost))
+	mux.Handle("GET /transaction/view/{id}", protected.ThenFunc(app.transactionView))
+	mux.Handle("POST /transaction/update/{id}", protected.ThenFunc(app.transactionUpdate))
+	mux.Handle("GET /transaction/delete/{id}", protected.ThenFunc(app.transactionDelete))
 	mux.Handle("GET /account/view", protected.ThenFunc(app.accountView))
 	mux.Handle("GET /account/password/update", protected.ThenFunc(app.accountPasswordUpdate))
 	mux.Handle("POST /account/password/update", protected.ThenFunc(app.accountPasswordUpdatePost))

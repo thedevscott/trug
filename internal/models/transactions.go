@@ -8,7 +8,9 @@ import (
 
 type TransactionModelInterface interface {
 	Insert(title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
+	Update(id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
 	Get(id int) (Transaction, error)
+	Delete(id int) (int, error)
 	Latest() ([]Transaction, error)
 }
 
@@ -28,6 +30,39 @@ type TransactionModel struct {
 	DB *sql.DB
 }
 
+func (m *TransactionModel) Update(id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
+	stmt := `UPDATE transactions 
+	SET title = ?, isIncome = ?, amountInCents = ?, category = ?, description = ?, transactionDate = ?, updated = UTC_TIMESTAMP()
+	WHERE id = ?`
+
+	result, err := m.DB.Exec(stmt, title, isIncome, amount, category, description, transactionDate, id)
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(rowsAffected), nil
+}
+
+func (m *TransactionModel) Delete(id int) (int, error) {
+	stmt := `DELETE FROM transactions WHERE id = ?`
+
+	result, err := m.DB.Exec(stmt, id)
+	if err != nil {
+		return 0, err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(rowsAffected), nil
+}
 func (m *TransactionModel) Insert(title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
 	stmt := `INSERT INTO transactions (title, isIncome, amountInCents, category, description, transactionDate, created, updated)
     VALUES(?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())`
