@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/fs"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/thedevscott/trug/internal/models"
@@ -38,17 +39,21 @@ func centsToDollar(v int64) string {
 }
 
 func shortenTitle(title string) string {
-	titleLenght := 15
-	if len(title) > titleLenght {
-		return title[:titleLenght] + "..."
+	if len(title) > titleLength() {
+		return strings.TrimSpace(title[:titleLength()]) + "..."
 	}
 	return title
+}
+
+func titleLength() int {
+	return 14
 }
 
 var functions = template.FuncMap{
 	"humanDate":     humanDate,
 	"centsToDollar": centsToDollar,
 	"shortenTitle":  shortenTitle,
+	"titleLength":   titleLength,
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {

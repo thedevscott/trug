@@ -94,7 +94,7 @@
             </tr>
             {{range .Transactions}}
             <tr>
-                <td {{if gt (len .Title) 15}} 
+                <td {{if gt (len .Title) titleLength}} 
                 data-hover='{{.Title}}'
                 {{end}}><a
                 href='/transaction/view/{{.ID}}'>{{shortenTitle
