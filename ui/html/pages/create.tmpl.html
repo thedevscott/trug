@@ -94,7 +94,11 @@
             </tr>
             {{range .Transactions}}
             <tr>
-                <td><a href='/transaction/view/{{.ID}}'>{{.Title}}</a></td>
+                <td {{if gt (len .Title) 15}} 
+                data-hover='{{.Title}}'
+                {{end}}><a
+                href='/transaction/view/{{.ID}}'>{{shortenTitle
+                .Title}}</a></td>
                 <td>{{centsToDollar .Amount}}</td>
                 <td>{{.Category}}</td>
                 <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>

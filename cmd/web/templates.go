@@ -37,9 +37,18 @@ func centsToDollar(v int64) string {
 	return fmt.Sprintf("%.2f", value)
 }
 
+func shortenTitle(title string) string {
+	titleLenght := 15
+	if len(title) > titleLenght {
+		return title[:titleLenght] + "..."
+	}
+	return title
+}
+
 var functions = template.FuncMap{
 	"humanDate":     humanDate,
 	"centsToDollar": centsToDollar,
+	"shortenTitle":  shortenTitle,
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {

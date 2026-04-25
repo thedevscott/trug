@@ -290,6 +290,34 @@ td, th {
     padding: 9px 18px;
 }
 
+th, td {
+    white-space: nowrap;
+    padding: 10px 15px;
+}
+
+td:first-child[data-hover] {
+    position: relative; 
+}
+
+td:first-child[data-hover]:hover::after {
+    display: block;
+}
+
+td:first-child[data-hover]::after{
+    content: attr(data-hover); 
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10;
+    white-space: nowrap;
+}
+
 .table-scroll-container {
     max-height: 860px; 
     overflow-y: scroll;
@@ -297,7 +325,7 @@ td, th {
     border-radius: 8px;
   }
   
-  tbody td {
+tbody td {
     padding: 12px;
     border-bottom: 1px solid #eee;
     height: 45px;
