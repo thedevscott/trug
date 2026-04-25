@@ -291,7 +291,7 @@ td, th {
 }
 
 .table-scroll-container {
-    max-height: 760px; 
+    max-height: 860px; 
     overflow-y: scroll;
     border: 1px solid #eee;
     border-radius: 8px;
@@ -480,3 +480,54 @@ footer {
   .checkbox-wrapper-7 .tgl-ios:checked + .tgl-btn:active:after {
     margin-left: -0.8em;
   }
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 20px;
+    padding: 24px;
+    background-color: #f8fafc;
+    border-radius: 12px;
+}
+
+.stats-container h2 {
+    flex: 0 0 100%; 
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    color: #1e293b;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card label {
+    font-size: 0.85rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.income { color: #16a34a; } 
+.expense { color: #dc2626; } 
+.total { color: #2563eb; } 

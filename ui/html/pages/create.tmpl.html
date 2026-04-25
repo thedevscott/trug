@@ -1,14 +1,29 @@
 {{define "title"}}Create a New Transaction{{end}}
 
 {{define "main"}}
-<!-- <div class='stats'>
-    <label>Date Range:</label>
-    <label>Income:</label>
-    <label>Expense:</label>
-    <label>Remaining Profit:</label>
-</div> -->
+
+<div class='stats-container'>
+    <h2>Expense Summary</h2>
+    <div class='stat-card'>
+        <label>Date Range</label>
+        <span class='value'>April 2026</span>
+    </div>
+    <div class='stat-card'>
+        <label>Money In</label>
+        <span class='value income'>+$5,200.00</span>
+    </div>
+    <div class='stat-card'>
+        <label>Money Out</label>
+        <span class='value expense'>-$3,150.00</span>
+    </div>
+    <div class='stat-card'>
+        <label>Money Left Over</label>
+        <span class='value total'>$2,050.00</span>
+    </div>
+</div>
+
 <div class='container'>
-    <div class="transaction-form">
+    <div class='transaction-form'>
     <h2>Transaction Entry</h2>
     <form action='/transaction/create' method='post'>
         <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
@@ -38,7 +53,11 @@
             {{with .Form.FieldErrors.isincome}}
                 <label class='error'>{{.}}</label>
             {{end}}
-            <input type='checkbox' name='is_income' value='{{.Form.IsIncome}}'>
+            <div class='checkbox-wrapper-7'>
+                <input class='tgl tgl-ios' id='cb2-7' type='checkbox' name='is_income'
+                value='{{.Form.IsIncome}}'>
+                <label class='tgl-btn' for='cb2-7'>
+            </div>
         </div>
         <div>
             <label>Category:</label>
@@ -60,7 +79,7 @@
     </form>
 </div>
 
-<div class="transactions-list">
+<div class='transactions-list'>
         <h2>Latest Transactions</h2>
         {{if .Transactions}}
         <div class='table-scroll-container'>
