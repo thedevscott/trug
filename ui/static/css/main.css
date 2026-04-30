@@ -11,14 +11,14 @@ html, body {
 }
 
 body {
-    line-height: 1.5;
+    /* line-height: 1.5; */
     background-color: #F1F3F6;
     color: #34495E;
     overflow-y: scroll;
 }
 
 header, nav, main, footer {
-    padding: 2px calc((100% - 800px) / 2) 0;
+    padding: 2px calc((100% - 1300px) / 2) 0;
 }
 
 main {
@@ -49,7 +49,6 @@ h2 {
     text-align: center;
     margin-bottom: 36px;
     position: relative;
-    top: -9px;
 }
 
 a {
@@ -126,21 +125,6 @@ nav a.live {
 
 nav a.live:hover {
     text-decoration: none;
-}
-
-nav a.live:after {
-    content: '';
-    display: block;
-    position: relative;
-    left: calc(50% - 7px);
-    top: 9px;
-    width: 14px;
-    height: 14px;
-    background: #F7F9FA;
-    border-left: 1px solid #E4E5E7;
-    border-bottom: 1px solid #E4E5E7;
-    -moz-transform: rotate(45deg);
-    -webkit-transform: rotate(-45deg);
 }
 
 a.button, input[type="submit"] {
@@ -366,7 +350,7 @@ footer {
   
   .transaction-form {
     flex: 0 0 auto; 
-    width: 40%;
+    /* width: 40%; */
     background: #ffffff;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -559,3 +543,99 @@ footer {
 .income { color: #16a34a; } 
 .expense { color: #dc2626; } 
 .total { color: #2563eb; } 
+
+.theme-btn:hover {
+    background-color: var(--border-color);
+    text-decoration: none;
+}
+
+.dark-mode .theme-btn {
+    color: #FFFFFF;
+}
+
+/* Color Palette Definitions */
+:root {
+    --bg-body: #F1F3F6;
+    --bg-container: #FFFFFF;
+    --bg-alt: #F7F9FA;
+    --text-main: #34495E;
+    --text-muted: #6A6C6F;
+    --border-color: #E4E5E7;
+    --input-bg: #FFFFFF;
+
+    --color-income: #16a34a; 
+    --color-expense: #dc2626; 
+    --color-total: #2563eb;
+}
+
+.dark-mode {
+    --bg-body: #121212;
+    --bg-container: #1E1E1E;
+    --bg-alt: #252525;
+    --text-main: #E1E1E1;
+    --text-muted: #A0A0A0;
+    --border-color: #333333;
+    --input-bg: #2D2D2D;
+    
+    /* Slightly brighter variants for dark mode */
+    --color-income: #22c55e; 
+    --color-expense: #ef4444; 
+    --color-total: #3b82f6;
+}
+
+.income { color: var(--color-income) !important; }
+.expense { color: var(--color-expense) !important; }
+.total { color: var(--color-total) !important; }
+
+.theme-btn {
+    background-color: var(--bg-container);
+    color: var(--text-main);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s;
+}
+
+.theme-btn:hover {
+    background-color: var(--bg-alt);
+    text-decoration: none;
+}
+
+/* Update existing selectors to use variables */
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+header a, nav a.live {
+    color: var(--header-link);
+}
+
+nav, footer, .transaction .metadata, tr:nth-child(2n), .stats-container {
+    background: var(--bg-alt);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+header, nav, form div:last-child, .transaction, .transaction pre, table, tr, footer, .transaction-form, .transaction-list {
+    border-color: var(--border-color);
+}
+
+.transaction, .transaction-form, .transaction-list, table, .stat-card {
+    background-color: var(--bg-container);
+}
+
+form input[type="date"], form input[type="number"], form input[type="text"], 
+form input[type="password"], form input[type="email"], textarea {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.value, .stats-container h2, .transaction .metadata strong {
+    color: var(--text-main);
+    text-align: center;
+}
