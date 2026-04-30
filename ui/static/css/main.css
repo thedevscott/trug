@@ -403,6 +403,13 @@ footer {
     border: 1px solid rgba(0,0,0,0.12);
 }
 
+.checkbox-wrapper-7 {
+    display: inline-flex;
+    transform: scale(0.6);
+    position: relative;
+    top: 12px;
+}
+
 .checkbox-wrapper-7 .tgl {
     display: none;
   }
