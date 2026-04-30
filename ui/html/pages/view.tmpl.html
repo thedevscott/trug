@@ -1,6 +1,7 @@
 {{define "title"}}Transaction #{{.Transaction.ID}}{{end}}
 
 {{define "main"}}
+<div class='view-container'>
 <h2>Editing Entry - {{.Transaction.Title}}</h2>
         <form action='/transaction/update/{{.Transaction.ID}}' method='post'>
             <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
@@ -37,5 +38,6 @@
                 <a href='/transaction/delete/{{.Transaction.ID}}'>Delete</a>
             </div>
         </form>
+    </div>
 {{end}}
   
