@@ -97,6 +97,9 @@ func (app *application) transactionCreatePost(w http.ResponseWriter, r *http.Req
 	}
 	amountInCents := amount * 100
 
+	isChecked := r.FormValue("is_income") != ""
+	form.IsIncome = isChecked
+
 	_, err = app.transactions.Insert(form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
 	if err != nil {
 		app.serverError(w, r, err)
@@ -182,6 +185,9 @@ func (app *application) transactionUpdate(w http.ResponseWriter, r *http.Request
 		return
 	}
 	amountInCents := amount * 100
+
+	isChecked := r.FormValue("is_income") != ""
+	form.IsIncome = isChecked
 
 	_, err = app.transactions.Update(id, form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
 	if err != nil {
