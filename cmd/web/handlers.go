@@ -58,7 +58,7 @@ func (app *application) transactionCreate(w http.ResponseWriter, r *http.Request
 	data.Transactions = transactions
 
 	data.Form = transactionCreateForm{
-		Date: time.Now().Format("2027-04-30"),
+		Date: time.Now().Format("2006-01-02"),
 	}
 
 	app.render(w, r, http.StatusOK, "create.tmpl.html", data)
