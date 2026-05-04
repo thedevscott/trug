@@ -47,7 +47,8 @@ type userLoginForm struct {
 
 // transactionCreate A handler for creating a snippet
 func (app *application) transactionCreate(w http.ResponseWriter, r *http.Request) {
-	transactions, err := app.transactions.Latest()
+	userID := app.getCurrentUsersID(w, r)
+	transactions, err := app.transactions.Latest(userID)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
@@ -100,7 +101,8 @@ func (app *application) transactionCreatePost(w http.ResponseWriter, r *http.Req
 	isChecked := r.FormValue("is_income") != ""
 	form.IsIncome = isChecked
 
-	_, err = app.transactions.Insert(form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
+	userID := app.getCurrentUsersID(w, r)
+	_, err = app.transactions.Insert(userID, form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
@@ -120,7 +122,8 @@ func (app *application) transactionView(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	transaction, err := app.transactions.Get(id)
+	userID := app.getCurrentUsersID(w, r)
+	transaction, err := app.transactions.Get(userID, id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			http.NotFound(w, r)
@@ -189,7 +192,8 @@ func (app *application) transactionUpdate(w http.ResponseWriter, r *http.Request
 	isChecked := r.FormValue("is_income") != ""
 	form.IsIncome = isChecked
 
-	_, err = app.transactions.Update(id, form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
+	userID := app.getCurrentUsersID(w, r)
+	_, err = app.transactions.Update(userID, id, form.Title, form.IsIncome, int64(amountInCents), form.Category, form.Description, transactionDate)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
@@ -209,7 +213,8 @@ func (app *application) transactionDelete(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	num, err := app.transactions.Delete(id)
+	userID := app.getCurrentUsersID(w, r)
+	num, err := app.transactions.Delete(userID, id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			http.NotFound(w, r)
@@ -420,4 +425,12 @@ func (app *application) accountPasswordUpdatePost(w http.ResponseWriter, r *http
 	app.sessionManager.Put(r.Context(), "flash", "Your password has been updated!")
 
 	http.Redirect(w, r, "/account/view", http.StatusSeeOther)
+}
+
+func (app *application) getCurrentUsersID(w http.ResponseWriter, r *http.Request) int {
+	currentUsersID := app.sessionManager.GetInt(r.Context(), "authenticatedUserID")
+	if currentUsersID == 0 {
+		app.serverError(w, r, errors.New("failded to verify user"))
+	}
+	return currentUsersID
 }

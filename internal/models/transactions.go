@@ -7,11 +7,11 @@ import (
 )
 
 type TransactionModelInterface interface {
-	Insert(title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
-	Update(id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
-	Get(id int) (Transaction, error)
-	Delete(id int) (int, error)
-	Latest() ([]Transaction, error)
+	Insert(userID int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
+	Update(userID int, id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error)
+	Get(userID int, id int) (Transaction, error)
+	Delete(userID int, id int) (int, error)
+	Latest(userID int) ([]Transaction, error)
 }
 
 type Transaction struct {
@@ -30,12 +30,12 @@ type TransactionModel struct {
 	DB *sql.DB
 }
 
-func (m *TransactionModel) Update(id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
+func (m *TransactionModel) Update(userID int, id int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
 	stmt := `UPDATE transactions 
 	SET title = ?, isIncome = ?, amountInCents = ?, category = ?, description = ?, transactionDate = ?, updated = UTC_TIMESTAMP()
-	WHERE id = ?`
+	WHERE id = ? and userid = ?`
 
-	result, err := m.DB.Exec(stmt, title, isIncome, amount, category, description, transactionDate, id)
+	result, err := m.DB.Exec(stmt, title, isIncome, amount, category, description, transactionDate, id, userID)
 	if err != nil {
 		return 0, err
 	}
@@ -48,10 +48,10 @@ func (m *TransactionModel) Update(id int, title string, isIncome bool, amount in
 	return int(rowsAffected), nil
 }
 
-func (m *TransactionModel) Delete(id int) (int, error) {
-	stmt := `DELETE FROM transactions WHERE id = ?`
+func (m *TransactionModel) Delete(userID int, id int) (int, error) {
+	stmt := `DELETE FROM transactions WHERE id = ? and userid = ?`
 
-	result, err := m.DB.Exec(stmt, id)
+	result, err := m.DB.Exec(stmt, id, userID)
 	if err != nil {
 		return 0, err
 	}
@@ -63,11 +63,11 @@ func (m *TransactionModel) Delete(id int) (int, error) {
 
 	return int(rowsAffected), nil
 }
-func (m *TransactionModel) Insert(title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
-	stmt := `INSERT INTO transactions (title, isIncome, amountInCents, category, description, transactionDate, created, updated)
-    VALUES(?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())`
+func (m *TransactionModel) Insert(userID int, title string, isIncome bool, amount int64, category string, description string, transactionDate time.Time) (int, error) {
+	stmt := `INSERT INTO transactions (title, isIncome, amountInCents, category, description, transactionDate, created, updated, userid)
+    VALUES(?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP(), ?)`
 
-	result, err := m.DB.Exec(stmt, title, isIncome, amount, category, description, transactionDate)
+	result, err := m.DB.Exec(stmt, title, isIncome, amount, category, description, transactionDate, userID)
 	if err != nil {
 		return 0, err
 	}
@@ -80,11 +80,11 @@ func (m *TransactionModel) Insert(title string, isIncome bool, amount int64, cat
 	return int(id), nil
 }
 
-func (m *TransactionModel) Get(id int) (Transaction, error) {
+func (m *TransactionModel) Get(userID int, id int) (Transaction, error) {
 	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions
-    WHERE id = ?`
+    WHERE id = ? and userid = ?`
 
-	row := m.DB.QueryRow(stmt, id)
+	row := m.DB.QueryRow(stmt, id, userID)
 
 	var t Transaction
 
@@ -100,10 +100,10 @@ func (m *TransactionModel) Get(id int) (Transaction, error) {
 	return t, nil
 }
 
-func (m *TransactionModel) Latest() ([]Transaction, error) {
-	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions ORDER BY id DESC LIMIT 20`
+func (m *TransactionModel) Latest(userID int) ([]Transaction, error) {
+	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions WHERE userid = ? ORDER BY id`
 
-	rows, err := m.DB.Query(stmt)
+	rows, err := m.DB.Query(stmt, userID)
 	if err != nil {
 		return nil, err
 	}
