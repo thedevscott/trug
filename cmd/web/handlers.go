@@ -54,8 +54,21 @@ func (app *application) transactionCreate(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	// 30 days ago
+	start := time.Now().AddDate(0, 0, -30).Format("2006-01-02")
+
+	// present day
+	end := time.Now().Format("2006-01-02")
+
+	stats, err := app.transactions.GetUserStats(userID, start, end)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
 	data := app.newTemplateData(r)
 	data.Transactions = transactions
+	data.Stats = stats
 
 	data.Form = transactionCreateForm{
 		Date: time.Now().Format("2006-01-02"),

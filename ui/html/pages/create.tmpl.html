@@ -6,19 +6,19 @@
     <h2>Expense Summary</h2>
     <div class='stat-card'>
         <label>Date Range</label>
-        <span class='value'>April 2026</span>
+        <span class='value'>{{.Stats.DateRange}}</span>
     </div>
     <div class='stat-card'>
         <label>Money In</label>
-        <span class='value income'>+$5,200.00</span>
+        <span class='value income'>${{centsToDollar .Stats.MoneyIn}}</span>
     </div>
     <div class='stat-card'>
         <label>Money Out</label>
-        <span class='value expense'>-$3,150.00</span>
+        <span class='value expense'>${{centsToDollar .Stats.MoneyOut}}</span>
     </div>
     <div class='stat-card'>
         <label>Money Left Over</label>
-        <span class='value total'>$2,050.00</span>
+        <span class='value total'>${{centsToDollar .Stats.MoneyLeftOver}}</span>
     </div>
 </div>
 
@@ -89,8 +89,8 @@
                 <th>Amount</th>
                 <th>Category</th>
                 <th>Income</th>
-                <th>Created</th>
-                <th>Entry Date</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
             </tr>
             {{range .Transactions}}
             <tr>
@@ -103,7 +103,7 @@
                 <td>{{.Category}}</td>
                 <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>
                 <td>{{humanDate .CreatedAt}}</td>
-                <td>{{humanDate .TransactionDate}}</td>
+                <td>{{humanDate .UpdatedAt}}</td>
             </tr>
             {{end}}
         </table>

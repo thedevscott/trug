@@ -105,7 +105,7 @@ func (m *TransactionModel) Insert(userID int, title string, isIncome bool, amoun
 		?
 	)`
 
-	result, err := m.DB.Exec(stmt, title, isIncome, isIncome, amount, category, description, transactionDate, userID)
+	result, err := m.DB.Exec(stmt, title, isIncome, isIncome, amount, amount, category, description, transactionDate, userID)
 	if err != nil {
 		return 0, err
 	}
@@ -139,7 +139,7 @@ func (m *TransactionModel) Get(userID int, id int) (Transaction, error) {
 }
 
 func (m *TransactionModel) Latest(userID int) ([]Transaction, error) {
-	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions WHERE userid = ? ORDER BY id`
+	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions WHERE userid = ? ORDER BY updated DESC`
 
 	rows, err := m.DB.Query(stmt, userID)
 	if err != nil {

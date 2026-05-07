@@ -21,6 +21,7 @@ type templateData struct {
 	IsAuthenticated bool
 	CSRFToken       string
 	User            models.User
+	Stats           models.TransactionStats
 }
 
 // humanDate returns a nicely formatted string representation of a time.Time
