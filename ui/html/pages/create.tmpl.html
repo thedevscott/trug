@@ -89,7 +89,7 @@
                 <th>Amount</th>
                 <th>Category</th>
                 <th>Income</th>
-                <th>Created Date</th>
+                <th>Record Date</th>
                 <th>Updated Date</th>
             </tr>
             {{range .Transactions}}
@@ -102,7 +102,7 @@
                 <td>{{centsToDollar .Amount}}</td>
                 <td>{{.Category}}</td>
                 <td>{{if .IsIncome}} Yes {{else}} No {{end}}</td>
-                <td>{{humanDate .CreatedAt}}</td>
+                <td>{{humanDate .TransactionDate}}</td>
                 <td>{{humanDate .UpdatedAt}}</td>
             </tr>
             {{end}}

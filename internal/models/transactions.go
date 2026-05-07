@@ -139,7 +139,7 @@ func (m *TransactionModel) Get(userID int, id int) (Transaction, error) {
 }
 
 func (m *TransactionModel) Latest(userID int) ([]Transaction, error) {
-	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions WHERE userid = ? ORDER BY updated DESC`
+	stmt := `SELECT id, title, isIncome, amountInCents, category, description, transactionDate, created, updated FROM transactions WHERE userid = ? ORDER BY id DESC`
 
 	rows, err := m.DB.Query(stmt, userID)
 	if err != nil {
