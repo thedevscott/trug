@@ -345,6 +345,10 @@ footer {
     padding: 1.5% 10%;
 }
 
+.login-container {
+    padding: 1.5% 20%;
+}
+
 .container {
     display: flex;
     gap: 1rem;
@@ -549,7 +553,7 @@ footer {
 }
 
 .value {
-    font-size: 1.25rem;
+    font-size: large;
     font-weight: 700;
     color: #1e293b;
 }

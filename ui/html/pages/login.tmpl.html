@@ -1,6 +1,7 @@
 {{define "title"}}Login{{end}}
 
 {{define "main"}}
+<div class='login-container'>
 <form action='/user/login' method='POST' novalidate>
     <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
     {{range .Form.NonFieldErrors}}
@@ -24,4 +25,5 @@
         <input type='submit' value='Login'>
     </div>
 </form>
+</div>
 {{end}}
