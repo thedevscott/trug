@@ -1,0 +1,32 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql-trug
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: trugpass
+      MYSQL_DATABASE: trug
+      MYSQL_USER: web
+      MYSQL_PASSWORD: trugpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  web:
+    build: .
+    container_name: trug-app-web
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PORT: 4000
+      MYSQL_HOST: db:3306
+      MYSQL_DATABASE: trug
+      MYSQL_USER: web
+      MYSQL_PASSWORD: trugpass
+    ports:
+      - "4000:4000"
+
+volumes:
+  db_data:
