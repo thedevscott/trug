@@ -11,8 +11,8 @@ func TestBasicHumanDate(t *testing.T) {
 	tm := time.Date(2026, 3, 17, 10, 15, 0, 0, time.UTC)
 	hd := humanDate(tm)
 
-	if hd != "17 Mar 2026 at 10:15" {
-		t.Errorf("got %q; want %q", hd, "17 Mar 2026 at 10:15")
+	if hd != "17 Mar 2026" {
+		t.Errorf("got %q; want %q", hd, "17 Mar 2026")
 	}
 }
 
@@ -25,7 +25,7 @@ func TestHumanDate(t *testing.T) {
 		{
 			name: "UTC",
 			tm:   time.Date(2026, 3, 17, 10, 15, 0, 0, time.UTC),
-			want: "17 Mar 2026 at 10:15",
+			want: "17 Mar 2026",
 		},
 		{
 			name: "Empty",
@@ -35,7 +35,7 @@ func TestHumanDate(t *testing.T) {
 		{
 			name: "CET",
 			tm:   time.Date(2024, 3, 17, 10, 15, 0, 0, time.FixedZone("CET", 1*60*60)),
-			want: "17 Mar 2024 at 09:15",
+			want: "17 Mar 2024",
 		},
 	}
 
