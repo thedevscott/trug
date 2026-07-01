@@ -1,5 +1,5 @@
 # Trug
-A lightweight private local web app for keeping track of your finances.
+A lightweight private local web app for keeping track of your monthly finances.
 
 ### Definition
 * trug /trŭg/ - noun: A shallow, usually oval gardening basket used to hold harvests
