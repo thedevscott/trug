@@ -57,24 +57,29 @@ compose-db-logs:
 .PHONY: help
 help:
 	go run ./cmd/web/ -help
+#===========================================================================
 
 .PHONY: run
 run:
 	go run ./cmd/web/ -addr=":4000"
+#===========================================================================
 
 .PHONY: run-dockerized
 run-dockerized:
 	go run ./cmd/web/ -addr=":4000" \
 	-dsn="web:trugpass@tcp(db:3306)/trug?parseTime=true"
 
+#===========================================================================
 .PHONY: web-test
 web-test:
 	go test -v ./cmd/web/
 
+#===========================================================================
 .PHONY: test
 test:
 	go test -v ./...
 
+#===========================================================================
 .PHONY: test-profile
 test-profile:
 	go test -cover ./...
