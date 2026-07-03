@@ -36,6 +36,9 @@ make compose-up
 * the ***makefile*** contains several other commands you may find useful if you
   plan to modify the app.
 
+* the hardcoded values (db name, db pass etc.) in the docker compose file should
+  be changed to pull from environment variables to improve security.
+
 * For LAN wide access, get your LAN interface address via 
 ```bash
 ipconfig getifaddr en0
