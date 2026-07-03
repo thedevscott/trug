@@ -26,7 +26,7 @@ services:
       MYSQL_USER: web
       MYSQL_PASSWORD: trugpass
     ports:
-      - "4000:4000"
+      - "0.0.0.0:4000:4000"
 
 volumes:
   db_data:

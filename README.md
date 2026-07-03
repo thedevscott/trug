@@ -36,6 +36,15 @@ make compose-up
 * the ***makefile*** contains several other commands you may find useful if you
   plan to modify the app.
 
+* For LAN wide access, get your LAN interface address via 
+```bash
+ipconfig getifaddr en0
+```
+* you may need to use 'en1' if the above fails or use the 'getiflist' option to see whats available.
+
+* you can also look into setting up a [static ip](https://www.geeksforgeeks.org/devops/how-to-provide-the-static-ip-to-a-docker-container/) for the docker host.
+Use that address as: 'https://lan-intf-addr:4000' to access the app.
+
 # Usage
 Once the app is up and running, open your browser and connect at
 [localhost:4000](https://localhost:4000).
